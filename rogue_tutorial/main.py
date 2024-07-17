@@ -1,7 +1,7 @@
 import tcod
+from engine import Engine
 from entity import Entity
 from input_handlers import EventHandler
-from actions import Action, MovementAction, EscapeAction
 
 def main():
     screen_height = 50
@@ -11,9 +11,13 @@ def main():
         "dejavu10x10_gs_tc.png", 32, 8, tcod.tileset.CHARMAP_TCOD
     )
 
+    event_handler = EventHandler()
+
     player = Entity(int(screen_width/2), int(screen_height/2), "@", (255, 255, 255))
     npc = Entity(int(screen_width/2 - 5), int(screen_height/2), "@", (255, 255, 0))
     entities = {player, npc}
+
+    engine = Engine(entities=entities, event_handler=event_handler, player=player)
 
     event_handler = EventHandler()
 
@@ -26,22 +30,11 @@ def main():
     ) as context:
         root_console = tcod.Console(screen_width, screen_height, order="F")
         while True:
-            root_console.print(x=player.x, y=player.y, string=player.char, fg=player.color)
-            root_console.print(x=npc.x, y=npc.y, string=npc.char, fg=npc.color)
+            engine.render(console=root_console, context=context)
 
-            context.present(root_console)
-
-            root_console.clear()
-
-            for event in tcod.event.wait():
-                action = event_handler.dispatch(event)
-
-                if action is None:
-                    continue
-                if isinstance(action, MovementAction):
-                    player.move(dx=action.dx, dy=action.dy)
-                elif isinstance(action, EscapeAction):
-                    raise SystemExit()
+            events = tcod.event.wait()
+            
+            engine.handle_events(events)
 
 if __name__ == "__main__":
     main()
