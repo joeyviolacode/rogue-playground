@@ -35,7 +35,7 @@ def main():
         player=player,
     )
 
-    engine = Engine(entities=entities, event_handler=event_handler, game_map=game_map, player=player)
+    engine = Engine(event_handler=event_handler, game_map=game_map, player=player)
 
     event_handler = EventHandler()
 
