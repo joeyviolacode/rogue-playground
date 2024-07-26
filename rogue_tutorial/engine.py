@@ -19,7 +19,7 @@ class Engine:
     def handle_enemy_turns(self) -> None:
         for entity in set(self.game_map.entities) - {self.player}:
             if self.game_map.visible[entity.x, entity.y]:
-                print(f"The {entity.name} stands around, twiddling it's thumbs.")
+                print(f"The {entity.name} stands around, twiddling its thumbs.")
 
     def handle_events(self, events: Iterable[Any]) -> None:
         for event in events:
