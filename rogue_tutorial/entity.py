@@ -9,8 +9,11 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="Entity")
 
 class Entity:
+    game_map: GameMap
+
     def __init__(
         self,
+        game_map: GameMap | None = None,
         x: int = 0,
         y: int = 0,
         char: str = "?",
@@ -24,16 +27,29 @@ class Entity:
         self.color = color
         self.name = name
         self.blocks_movement = blocks_movement
+        if game_map:
+            self.game_map = game_map
+            game_map.entities.add(self)
 
-    def spawn(self: T, gamemap: GameMap, x: int, y: int) -> T:
+    def spawn(self: T, game_map: GameMap, x: int, y: int) -> T:
         clone = copy.deepcopy(self)
         clone.x = x
         clone.y = y
+        clone.game_map = game_map
 
-        gamemap.entities.append(clone)
+        game_map.entities.append(clone)
 
         return clone
 
     def move(self, dx: int, dy: int):
         self.x += dx
         self.y += dy
+
+    def place(self, x: int, y: int, game_map: GameMap | None = None) -> None:
+        self.x = x
+        self.y = y
+        if game_map:
+            if hasattr(self, "game_map"):
+                self.game_map.entities.remove(self)
+            self.game_map = game_map
+            game_map.entities.append(self)
