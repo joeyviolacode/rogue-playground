@@ -48,7 +48,7 @@ class MeleeAction(ActionWithDirection):
         if not target:
             return
         
-        print(f"You kick the {target.name}! Ouch!")
+        print(f"{self.entity.name} kick the {target.name}! Ouch!")
 
 class MovementAction(ActionWithDirection):
     def perform(self) -> None:
@@ -69,3 +69,7 @@ class BumpAction(ActionWithDirection):
             return MeleeAction(self.entity, self.dx, self.dy).perform()
         else:
             return MovementAction(self.entity, self.dx, self.dy).perform()
+        
+class WaitAction(Action):
+    def perform(self) -> None:
+        pass
