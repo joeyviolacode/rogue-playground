@@ -1,3 +1,6 @@
 .vscode
 .vscode/settings.json
-*/__pycache__
+./rogue_tutorial/__pycache__/
+__pycache__/
+rogue_tutorial/__pycache__/*
+*.pyc
